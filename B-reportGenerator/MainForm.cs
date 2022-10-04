@@ -123,6 +123,11 @@ namespace B_reportGenerator
         private void loadCiCsvBackgroundWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             toggleProgressElements(true);
+            if (null != e.Error)
+            {
+                MessageBox.Show(String.Format("Processing error: {0}.\n{1}", e.Error.Message, e.Error.ToString()), 
+                    "Processing Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             if (openCsvFileCheckBox.Checked)
                 Process.Start("notepad.exe", outputCsvReportFileTextBox.Text);
         }
@@ -184,16 +189,6 @@ namespace B_reportGenerator
             string passive = obj.ToString();
             if (string.IsNullOrEmpty(active) || string.IsNullOrEmpty(passive)) return;
             this.config.AddAagItem(active, passive);
-        }
-
-        private void saveTeamVMs()
-        {
-
-        }
-
-        private void saveAagItems()
-        {
-
         }
     }
 }

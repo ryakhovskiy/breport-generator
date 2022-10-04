@@ -60,26 +60,35 @@ namespace B_reportGenerator
             if (lines.Count == 0) return;
 
             Dictionary<string, int> headerData = parseHeaderData(lines[0]);
-            for (int i = 1; i < lines.Count; i++)
+            int i = 1;
+            try
             {
-                string[] line = lines[i];
-                if (null == line) continue;
-                if (headerData.ContainsKey("install_status"))
+                for (i = 1; i < lines.Count; i++)
                 {
-                    string status = line[headerData["install_status"]];
-                    if (!status.Equals("Installed")) continue;
-                }
+                    string[] line = lines[i];
+                    if (null == line) continue;
+                    if (headerData.ContainsKey("install_status"))
+                    {
+                        string status = line[headerData["install_status"]];
+                        if (!status.Equals("Installed")) continue;
+                    }
 
-                WinServer srv = new WinServer();
-                srv.Name = line[headerData["name"]];
-                srv.ServiceName = line[headerData["u_service_name"]];
-                srv.ServiceInstance = line[headerData["u_service_instance"]];
-                int result;
-                int.TryParse(line[headerData["cpu_count"]], out result);
-                srv.CpuCount = result;
-                int.TryParse(line[headerData["cpu_core_count"]], out result);
-                srv.CpuCoreCount = result;
-                winServerData.TryAdd(srv.Name, srv);
+                    WinServer srv = new WinServer();
+                    srv.Name = line[headerData["name"]];
+                    srv.ServiceName = line[headerData["u_service_name"]];
+                    srv.ServiceInstance = line[headerData["u_service_instance"]];
+                    int result;
+                    int.TryParse(line[headerData["cpu_count"]], out result);
+                    srv.CpuCount = result;
+                    int.TryParse(line[headerData["cpu_core_count"]], out result);
+                    srv.CpuCoreCount = result;
+                    winServerData.TryAdd(srv.Name, srv);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(
+                   String.Format("Error processing Windows Servers file, {0}, line #{1}: {2}", windowsCiFile, i, e.Message), e);
             }
         }
 
@@ -89,25 +98,34 @@ namespace B_reportGenerator
             if (lines.Count == 0) return;
 
             Dictionary<string, int> headerData = parseHeaderData(lines[0]);
-            for (int i = 1; i < lines.Count; i++)
+            int i = 1;
+            try
             {
-                string[] line = lines[i];
-                if (null == line) continue;
-                SqlInstance sql = new SqlInstance();
-                sql.Name = line[headerData["name"]];
-                sql.ServiceName = line[headerData["u_service_name"]];
-                sql.RecoveryServerName = line[headerData["u_recovery_server_name"]];
-                sql.Edition = line[headerData["edition"]];
-                sql.Version = line[headerData["version"]];
-                sql.InstanceName = line[headerData["instance_name"]];
-                sql.ServerName = line[headerData["u_servername"]];
-                string[] names = sql.Name.Split('@');
-                if (names.Length != 2) continue;
-                sql.ParsedWinServerName = names[1];
-                sql.ParsedInstanceName = names[0];
+                for (i = 1; i < lines.Count; i++)
+                {
+                    string[] line = lines[i];
+                    if (null == line) continue;
+                    SqlInstance sql = new SqlInstance();
+                    sql.Name = line[headerData["name"]];
+                    sql.ServiceName = line[headerData["u_service_name"]];
+                    sql.RecoveryServerName = line[headerData["u_recovery_server_name"]];
+                    sql.Edition = line[headerData["edition"]];
+                    sql.Version = line[headerData["version"]];
+                    sql.InstanceName = line[headerData["instance_name"]];
+                    sql.ServerName = line[headerData["u_servername"]];
+                    string[] names = sql.Name.Split('@');
+                    if (names.Length != 2) continue;
+                    sql.ParsedWinServerName = names[1];
+                    sql.ParsedInstanceName = names[0];
 
-                sqlInstanceData.AddOrUpdate(sql.ParsedWinServerName, new List<SqlInstance>() { sql },
-                    (key, oldValue) => { oldValue.Add(sql); return oldValue; } );
+                    sqlInstanceData.AddOrUpdate(sql.ParsedWinServerName, new List<SqlInstance>() { sql },
+                        (key, oldValue) => { oldValue.Add(sql); return oldValue; } );
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(
+                   String.Format("Error processing SQL Instances file, {0}, line #{1}: {2}", sqlCiFile, i, e.Message), e);
             }
         }
 
@@ -117,20 +135,28 @@ namespace B_reportGenerator
             if (lines.Count == 0) return;
             
             Dictionary<string, int> headerData = parseHeaderData(lines[0]);
-            for (int i = 1; i < lines.Count; i++)
+            int i = 1;
+            try
             {
-                string[] line = lines[i];
-                if (null == line) continue;
-                if (headerData.ContainsKey("install_status"))
+                for (i = 1; i < lines.Count; i++)
                 {
-                    string status = line[headerData["install_status"]];
-                    if (!status.Equals("Installed")) continue;
+                    string[] line = lines[i];
+                    if (null == line) continue;
+                    if (headerData.ContainsKey("install_status"))
+                    {
+                        string status = line[headerData["install_status"]];
+                        if (!status.Equals("Installed")) continue;
+                    }
+                    PublicCloudDb pdb = new PublicCloudDb();
+                    pdb.Name = line[headerData["name"]];
+                    pdb.ServiceName = line[headerData["u_service_name"]];
+                    pdb.ServiceInstance = line[headerData["u_service_instance"]];
+                    this.publicCloudDbData.TryAdd(pdb.Name, pdb);
                 }
-                PublicCloudDb pdb = new PublicCloudDb();
-                pdb.Name = line[headerData["name"]];
-                pdb.ServiceName = line[headerData["u_service_name"]];
-                pdb.ServiceInstance = line[headerData["u_service_instance"]];
-                this.publicCloudDbData.TryAdd(pdb.Name, pdb);
+            } catch (Exception e)
+            {
+                throw new Exception(
+                    String.Format("Error processing Public Cloud DBs, {0}, line #{1}: {2}", publicDbCiFile, i, e.Message), e);
             }
 
             backgroundWorker.ReportProgress(0, "Public Cloud SQL Instances Data Loaded");
@@ -190,12 +216,20 @@ namespace B_reportGenerator
         public static List<string[]> readCsv(string file)
         {
             List<string[]> data = new List<string[]>();
-            using (TextFieldParser parser = new TextFieldParser(file))
+            try
             {
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(DELIMITER);
-                while (!parser.EndOfData) data.Add(parser.ReadFields());
+                using (TextFieldParser parser = new TextFieldParser(file))
+                {
+                    parser.TextFieldType = FieldType.Delimited;
+                    parser.SetDelimiters(DELIMITER);
+                    while (!parser.EndOfData) data.Add(parser.ReadFields());
+                }
+            } catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "\n" + e.StackTrace, "Error loading data from CSV: " + file, 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            
             return data;
         }
     }

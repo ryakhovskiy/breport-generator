@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.cmdbGroupBox = new System.Windows.Forms.GroupBox();
+            this.openCsvFileCheckBox = new System.Windows.Forms.CheckBox();
             this.reportDateTextBox = new System.Windows.Forms.TextBox();
             this.reportDateLabel = new System.Windows.Forms.Label();
             this.progressLabel = new System.Windows.Forms.Label();
@@ -61,7 +63,7 @@
             this.teamVmTextBox = new System.Windows.Forms.TextBox();
             this.teamVMsListBox = new System.Windows.Forms.ListBox();
             this.testVmList = new System.Windows.Forms.Label();
-            this.openCsvFileCheckBox = new System.Windows.Forms.CheckBox();
+            this.windowsCiToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.cmdbGroupBox.SuspendLayout();
             this.reportCustomizationsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.aagDataGridView)).BeginInit();
@@ -96,6 +98,18 @@
             this.cmdbGroupBox.TabIndex = 0;
             this.cmdbGroupBox.TabStop = false;
             this.cmdbGroupBox.Text = "CMDB";
+            // 
+            // openCsvFileCheckBox
+            // 
+            this.openCsvFileCheckBox.AutoSize = true;
+            this.openCsvFileCheckBox.Checked = true;
+            this.openCsvFileCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.openCsvFileCheckBox.Location = new System.Drawing.Point(535, 190);
+            this.openCsvFileCheckBox.Name = "openCsvFileCheckBox";
+            this.openCsvFileCheckBox.Size = new System.Drawing.Size(284, 24);
+            this.openCsvFileCheckBox.TabIndex = 101;
+            this.openCsvFileCheckBox.Text = "Open CSV Report File after generating";
+            this.openCsvFileCheckBox.UseVisualStyleBackColor = true;
             // 
             // reportDateTextBox
             // 
@@ -421,18 +435,6 @@
             this.testVmList.TabIndex = 0;
             this.testVmList.Text = "Team VMs";
             // 
-            // openCsvFileCheckBox
-            // 
-            this.openCsvFileCheckBox.AutoSize = true;
-            this.openCsvFileCheckBox.Checked = true;
-            this.openCsvFileCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.openCsvFileCheckBox.Location = new System.Drawing.Point(535, 190);
-            this.openCsvFileCheckBox.Name = "openCsvFileCheckBox";
-            this.openCsvFileCheckBox.Size = new System.Drawing.Size(284, 24);
-            this.openCsvFileCheckBox.TabIndex = 101;
-            this.openCsvFileCheckBox.Text = "Open CSV Report File after generating";
-            this.openCsvFileCheckBox.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -489,5 +491,6 @@
         private TextBox reportDateTextBox;
         private Label reportDateLabel;
         private CheckBox openCsvFileCheckBox;
+        private ToolTip windowsCiToolTip;
     }
 }
