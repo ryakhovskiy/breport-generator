@@ -30,6 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.cmdbGroupBox = new System.Windows.Forms.GroupBox();
+            this.reportMonthTextBox = new System.Windows.Forms.TextBox();
+            this.reportMonthLabel = new System.Windows.Forms.Label();
+            this.reportYearTextBox = new System.Windows.Forms.TextBox();
+            this.reportYearLabel = new System.Windows.Forms.Label();
             this.openCsvFileCheckBox = new System.Windows.Forms.CheckBox();
             this.reportDateTextBox = new System.Windows.Forms.TextBox();
             this.reportDateLabel = new System.Windows.Forms.Label();
@@ -74,6 +78,10 @@
             // 
             this.cmdbGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmdbGroupBox.Controls.Add(this.reportMonthTextBox);
+            this.cmdbGroupBox.Controls.Add(this.reportMonthLabel);
+            this.cmdbGroupBox.Controls.Add(this.reportYearTextBox);
+            this.cmdbGroupBox.Controls.Add(this.reportYearLabel);
             this.cmdbGroupBox.Controls.Add(this.openCsvFileCheckBox);
             this.cmdbGroupBox.Controls.Add(this.reportDateTextBox);
             this.cmdbGroupBox.Controls.Add(this.reportDateLabel);
@@ -94,17 +102,52 @@
             this.cmdbGroupBox.Controls.Add(this.windowsCiCsvPathLabel);
             this.cmdbGroupBox.Location = new System.Drawing.Point(12, 12);
             this.cmdbGroupBox.Name = "cmdbGroupBox";
-            this.cmdbGroupBox.Size = new System.Drawing.Size(1041, 222);
+            this.cmdbGroupBox.Size = new System.Drawing.Size(1248, 222);
             this.cmdbGroupBox.TabIndex = 0;
             this.cmdbGroupBox.TabStop = false;
             this.cmdbGroupBox.Text = "CMDB";
             // 
+            // reportMonthTextBox
+            // 
+            this.reportMonthTextBox.Location = new System.Drawing.Point(856, 152);
+            this.reportMonthTextBox.Name = "reportMonthTextBox";
+            this.reportMonthTextBox.Size = new System.Drawing.Size(49, 27);
+            this.reportMonthTextBox.TabIndex = 105;
+            this.reportMonthTextBox.Leave += new System.EventHandler(this.reportMonthTextBox_Leave);
+            // 
+            // reportMonthLabel
+            // 
+            this.reportMonthLabel.AutoSize = true;
+            this.reportMonthLabel.Location = new System.Drawing.Point(749, 155);
+            this.reportMonthLabel.Name = "reportMonthLabel";
+            this.reportMonthLabel.Size = new System.Drawing.Size(101, 20);
+            this.reportMonthLabel.TabIndex = 104;
+            this.reportMonthLabel.Text = "Report Month";
+            // 
+            // reportYearTextBox
+            // 
+            this.reportYearTextBox.Location = new System.Drawing.Point(662, 152);
+            this.reportYearTextBox.Name = "reportYearTextBox";
+            this.reportYearTextBox.Size = new System.Drawing.Size(74, 27);
+            this.reportYearTextBox.TabIndex = 103;
+            this.reportYearTextBox.Leave += new System.EventHandler(this.reportYearTextBox_Leave);
+            // 
+            // reportYearLabel
+            // 
+            this.reportYearLabel.AutoSize = true;
+            this.reportYearLabel.Location = new System.Drawing.Point(570, 155);
+            this.reportYearLabel.Name = "reportYearLabel";
+            this.reportYearLabel.Size = new System.Drawing.Size(86, 20);
+            this.reportYearLabel.TabIndex = 102;
+            this.reportYearLabel.Text = "Report Year";
+            // 
             // openCsvFileCheckBox
             // 
+            this.openCsvFileCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.openCsvFileCheckBox.AutoSize = true;
             this.openCsvFileCheckBox.Checked = true;
             this.openCsvFileCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.openCsvFileCheckBox.Location = new System.Drawing.Point(535, 190);
+            this.openCsvFileCheckBox.Location = new System.Drawing.Point(749, 190);
             this.openCsvFileCheckBox.Name = "openCsvFileCheckBox";
             this.openCsvFileCheckBox.Size = new System.Drawing.Size(284, 24);
             this.openCsvFileCheckBox.TabIndex = 101;
@@ -115,15 +158,16 @@
             // 
             this.reportDateTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.reportDateTextBox.Location = new System.Drawing.Point(832, 152);
+            this.reportDateTextBox.Enabled = false;
+            this.reportDateTextBox.Location = new System.Drawing.Point(1073, 152);
             this.reportDateTextBox.Name = "reportDateTextBox";
-            this.reportDateTextBox.Size = new System.Drawing.Size(197, 27);
+            this.reportDateTextBox.Size = new System.Drawing.Size(163, 27);
             this.reportDateTextBox.TabIndex = 90;
             // 
             // reportDateLabel
             // 
             this.reportDateLabel.AutoSize = true;
-            this.reportDateLabel.Location = new System.Drawing.Point(709, 155);
+            this.reportDateLabel.Location = new System.Drawing.Point(950, 155);
             this.reportDateLabel.Name = "reportDateLabel";
             this.reportDateLabel.Size = new System.Drawing.Size(117, 20);
             this.reportDateLabel.TabIndex = 15;
@@ -147,14 +191,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainProgressBar.Location = new System.Drawing.Point(6, 187);
             this.mainProgressBar.Name = "mainProgressBar";
-            this.mainProgressBar.Size = new System.Drawing.Size(523, 29);
+            this.mainProgressBar.Size = new System.Drawing.Size(730, 29);
             this.mainProgressBar.TabIndex = 1;
             this.mainProgressBar.Visible = false;
             // 
             // generateCsvReportButton
             // 
             this.generateCsvReportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.generateCsvReportButton.Location = new System.Drawing.Point(832, 187);
+            this.generateCsvReportButton.Location = new System.Drawing.Point(1039, 187);
             this.generateCsvReportButton.Name = "generateCsvReportButton";
             this.generateCsvReportButton.Size = new System.Drawing.Size(197, 29);
             this.generateCsvReportButton.TabIndex = 100;
@@ -165,7 +209,7 @@
             // outputCsvReportFileButton
             // 
             this.outputCsvReportFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputCsvReportFileButton.Location = new System.Drawing.Point(993, 119);
+            this.outputCsvReportFileButton.Location = new System.Drawing.Point(1200, 119);
             this.outputCsvReportFileButton.Name = "outputCsvReportFileButton";
             this.outputCsvReportFileButton.Size = new System.Drawing.Size(36, 29);
             this.outputCsvReportFileButton.TabIndex = 80;
@@ -179,7 +223,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputCsvReportFileTextBox.Location = new System.Drawing.Point(253, 119);
             this.outputCsvReportFileTextBox.Name = "outputCsvReportFileTextBox";
-            this.outputCsvReportFileTextBox.Size = new System.Drawing.Size(734, 27);
+            this.outputCsvReportFileTextBox.Size = new System.Drawing.Size(941, 27);
             this.outputCsvReportFileTextBox.TabIndex = 70;
             // 
             // outputCsvReportPathLabel
@@ -194,7 +238,7 @@
             // publicCloudInstancesCiCsvPathButton
             // 
             this.publicCloudInstancesCiCsvPathButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.publicCloudInstancesCiCsvPathButton.Location = new System.Drawing.Point(993, 84);
+            this.publicCloudInstancesCiCsvPathButton.Location = new System.Drawing.Point(1200, 84);
             this.publicCloudInstancesCiCsvPathButton.Name = "publicCloudInstancesCiCsvPathButton";
             this.publicCloudInstancesCiCsvPathButton.Size = new System.Drawing.Size(36, 29);
             this.publicCloudInstancesCiCsvPathButton.TabIndex = 60;
@@ -205,7 +249,7 @@
             // sqlInstancesCiCsvPathButton
             // 
             this.sqlInstancesCiCsvPathButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.sqlInstancesCiCsvPathButton.Location = new System.Drawing.Point(993, 52);
+            this.sqlInstancesCiCsvPathButton.Location = new System.Drawing.Point(1200, 52);
             this.sqlInstancesCiCsvPathButton.Name = "sqlInstancesCiCsvPathButton";
             this.sqlInstancesCiCsvPathButton.Size = new System.Drawing.Size(36, 29);
             this.sqlInstancesCiCsvPathButton.TabIndex = 40;
@@ -216,7 +260,7 @@
             // windowsCiCsvPathButton
             // 
             this.windowsCiCsvPathButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.windowsCiCsvPathButton.Location = new System.Drawing.Point(993, 19);
+            this.windowsCiCsvPathButton.Location = new System.Drawing.Point(1200, 19);
             this.windowsCiCsvPathButton.Name = "windowsCiCsvPathButton";
             this.windowsCiCsvPathButton.Size = new System.Drawing.Size(36, 29);
             this.windowsCiCsvPathButton.TabIndex = 20;
@@ -230,7 +274,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.publicCloudInstancesCiCsvPathTextBox.Location = new System.Drawing.Point(253, 86);
             this.publicCloudInstancesCiCsvPathTextBox.Name = "publicCloudInstancesCiCsvPathTextBox";
-            this.publicCloudInstancesCiCsvPathTextBox.Size = new System.Drawing.Size(734, 27);
+            this.publicCloudInstancesCiCsvPathTextBox.Size = new System.Drawing.Size(941, 27);
             this.publicCloudInstancesCiCsvPathTextBox.TabIndex = 50;
             // 
             // sqlInstancesCiCsvPathTextBox
@@ -239,7 +283,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sqlInstancesCiCsvPathTextBox.Location = new System.Drawing.Point(253, 53);
             this.sqlInstancesCiCsvPathTextBox.Name = "sqlInstancesCiCsvPathTextBox";
-            this.sqlInstancesCiCsvPathTextBox.Size = new System.Drawing.Size(734, 27);
+            this.sqlInstancesCiCsvPathTextBox.Size = new System.Drawing.Size(941, 27);
             this.sqlInstancesCiCsvPathTextBox.TabIndex = 30;
             // 
             // windowsCiCsvPathTextBox
@@ -248,7 +292,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.windowsCiCsvPathTextBox.Location = new System.Drawing.Point(253, 20);
             this.windowsCiCsvPathTextBox.Name = "windowsCiCsvPathTextBox";
-            this.windowsCiCsvPathTextBox.Size = new System.Drawing.Size(734, 27);
+            this.windowsCiCsvPathTextBox.Size = new System.Drawing.Size(941, 27);
             this.windowsCiCsvPathTextBox.TabIndex = 10;
             // 
             // publicCloudInstancesCsvPathLabel
@@ -302,7 +346,7 @@
             this.reportCustomizationsGroupBox.Controls.Add(this.testVmList);
             this.reportCustomizationsGroupBox.Location = new System.Drawing.Point(12, 240);
             this.reportCustomizationsGroupBox.Name = "reportCustomizationsGroupBox";
-            this.reportCustomizationsGroupBox.Size = new System.Drawing.Size(1041, 326);
+            this.reportCustomizationsGroupBox.Size = new System.Drawing.Size(1248, 439);
             this.reportCustomizationsGroupBox.TabIndex = 1;
             this.reportCustomizationsGroupBox.TabStop = false;
             this.reportCustomizationsGroupBox.Text = "Report Customizations";
@@ -338,7 +382,7 @@
             this.aagDataGridView.Name = "aagDataGridView";
             this.aagDataGridView.RowHeadersWidth = 51;
             this.aagDataGridView.RowTemplate.Height = 29;
-            this.aagDataGridView.Size = new System.Drawing.Size(494, 274);
+            this.aagDataGridView.Size = new System.Drawing.Size(701, 387);
             this.aagDataGridView.TabIndex = 160;
             this.aagDataGridView.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.aagDataGridView_RowLeave);
             this.aagDataGridView.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.aagDataGridView_UserDeletedRow);
@@ -369,7 +413,7 @@
             this.materialsDataGridView.Name = "materialsDataGridView";
             this.materialsDataGridView.RowHeadersWidth = 51;
             this.materialsDataGridView.RowTemplate.Height = 29;
-            this.materialsDataGridView.Size = new System.Drawing.Size(358, 274);
+            this.materialsDataGridView.Size = new System.Drawing.Size(358, 387);
             this.materialsDataGridView.TabIndex = 150;
             this.materialsDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.materialsDataGridView_UserAddedRow);
             this.materialsDataGridView.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.materialsDataGridView_UserDeletedRow);
@@ -423,7 +467,7 @@
             this.teamVMsListBox.ItemHeight = 20;
             this.teamVMsListBox.Location = new System.Drawing.Point(6, 116);
             this.teamVMsListBox.Name = "teamVMsListBox";
-            this.teamVMsListBox.Size = new System.Drawing.Size(150, 204);
+            this.teamVMsListBox.Size = new System.Drawing.Size(150, 304);
             this.teamVMsListBox.TabIndex = 140;
             // 
             // testVmList
@@ -439,7 +483,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1065, 578);
+            this.ClientSize = new System.Drawing.Size(1272, 691);
             this.Controls.Add(this.reportCustomizationsGroupBox);
             this.Controls.Add(this.cmdbGroupBox);
             this.Name = "MainForm";
@@ -492,5 +536,9 @@
         private Label reportDateLabel;
         private CheckBox openCsvFileCheckBox;
         private ToolTip windowsCiToolTip;
+        private TextBox reportMonthTextBox;
+        private Label reportMonthLabel;
+        private TextBox reportYearTextBox;
+        private Label reportYearLabel;
     }
 }

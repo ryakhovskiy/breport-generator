@@ -67,11 +67,8 @@ namespace B_reportGenerator
                 {
                     string[] line = lines[i];
                     if (null == line) continue;
-                    if (headerData.ContainsKey("install_status"))
-                    {
-                        string status = line[headerData["install_status"]];
-                        if (!status.Equals("Installed")) continue;
-                    }
+                    string status = line[headerData["install_status"]];
+                    if (!status.Equals("Installed")) continue;
 
                     WinServer srv = new WinServer();
                     srv.Name = line[headerData["name"]];
@@ -82,6 +79,7 @@ namespace B_reportGenerator
                     srv.CpuCount = result;
                     int.TryParse(line[headerData["cpu_core_count"]], out result);
                     srv.CpuCoreCount = result;
+                    srv.CreateDate = line[headerData["sys_created_on"]];
                     winServerData.TryAdd(srv.Name, srv);
                 }
             }
@@ -105,6 +103,9 @@ namespace B_reportGenerator
                 {
                     string[] line = lines[i];
                     if (null == line) continue;
+                    string status = line[headerData["install_status"]];
+                    if (!status.Equals("Installed")) continue;
+
                     SqlInstance sql = new SqlInstance();
                     sql.Name = line[headerData["name"]];
                     sql.ServiceName = line[headerData["u_service_name"]];
@@ -113,6 +114,7 @@ namespace B_reportGenerator
                     sql.Version = line[headerData["version"]];
                     sql.InstanceName = line[headerData["instance_name"]];
                     sql.ServerName = line[headerData["u_servername"]];
+                    sql.CreateDate = line[headerData["sys_created_on"]];
                     string[] names = sql.Name.Split('@');
                     if (names.Length != 2) continue;
                     sql.ParsedWinServerName = names[1];
@@ -142,15 +144,14 @@ namespace B_reportGenerator
                 {
                     string[] line = lines[i];
                     if (null == line) continue;
-                    if (headerData.ContainsKey("install_status"))
-                    {
-                        string status = line[headerData["install_status"]];
-                        if (!status.Equals("Installed")) continue;
-                    }
+                    string status = line[headerData["install_status"]];
+                    if (!status.Equals("Installed")) continue;
+
                     PublicCloudDb pdb = new PublicCloudDb();
                     pdb.Name = line[headerData["name"]];
                     pdb.ServiceName = line[headerData["u_service_name"]];
                     pdb.ServiceInstance = line[headerData["u_service_instance"]];
+                    pdb.CreateDate = line[headerData["sys_created_on"]];
                     this.publicCloudDbData.TryAdd(pdb.Name, pdb);
                 }
             } catch (Exception e)
@@ -178,6 +179,7 @@ namespace B_reportGenerator
         public int CpuCount { get; set; }
         public int CpuCoreCount { get; set; }
 
+        public string CreateDate { get; set; }
         public string ServiceInstance { get; set; }
     }
 
@@ -190,6 +192,8 @@ namespace B_reportGenerator
         public string Version { get; set; }
         public string Edition { get; set; }
         public string ServiceName { get; set; }
+
+        public string CreateDate { get; set; }
 
         public string ParsedInstanceName { get; set; }
 
@@ -207,6 +211,7 @@ namespace B_reportGenerator
         public string ServiceName { get; set; }
         public string ServiceInstance { get; set; }
 
+        public string CreateDate { get; set; }
     }
 
     class CsvReader

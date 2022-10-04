@@ -29,13 +29,30 @@ namespace B_reportGenerator
             config.GetTeamVms().ForEach(vm => this.teamVMsListBox.Items.Add(vm));
             config.GetMaterials().ToList().ForEach(m => this.materialsDataGridView.Rows.Add(m.MaterialNumber, m.Description));
             config.GetAag().ToList().ForEach(i => this.aagDataGridView.Rows.Add(i.Key, string.Join(';', i.Value)));
-            setReportDate();
+            setCurrentReportDate();
+        }
+
+        private void setCurrentReportDate()
+        {
+            var date = DateTime.Now;
+            var year = date.ToString("yyyy");
+            var month = date.ToString("MM");
+            this.reportYearTextBox.Text = year;
+            this.reportMonthTextBox.Text = month;
+            setReportDate(year, month);
         }
 
         private void setReportDate()
         {
-            string yearMonth = DateTime.Now.ToString("yyyyMM");
-            this.reportDateTextBox.Text = String.Format("{0}15", yearMonth);
+            var year = this.reportYearTextBox.Text;
+            var month = this.reportMonthTextBox.Text;
+            setReportDate(year, month);
+        }
+
+        private void setReportDate(string year, string month)
+        {
+            string reportDateTag = String.Format("{0}{1}15", year, month);
+            this.reportDateTextBox.Text = reportDateTag;
         }
 
         private void windowsCiCsvPathButton_Click(object sender, EventArgs e)
@@ -189,6 +206,16 @@ namespace B_reportGenerator
             string passive = obj.ToString();
             if (string.IsNullOrEmpty(active) || string.IsNullOrEmpty(passive)) return;
             this.config.AddAagItem(active, passive);
+        }
+
+        private void reportYearTextBox_Leave(object sender, EventArgs e)
+        {
+            setReportDate();
+        }
+
+        private void reportMonthTextBox_Leave(object sender, EventArgs e)
+        {
+            setReportDate();
         }
     }
 }

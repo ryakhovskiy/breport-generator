@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace B_reportGenerator
 {
@@ -8,12 +9,14 @@ namespace B_reportGenerator
 		private CmdbCsvData data;
 		private string reportDate;
 		private readonly string outputFile;
+		private DateTime reportLastDate;
 
 		internal ReportGenerator(string outputFile, CmdbCsvData data, string reportDate)
 		{
 			this.outputFile = outputFile;
 			this.data = data;
 			this.reportDate = reportDate;
+			this.reportLastDate = DateTime.ParseExact(reportDate, "yyyyMMdd", CultureInfo.InvariantCulture).AddDays(-14);
 		}
 
 		public void generateReport()
@@ -30,6 +33,25 @@ namespace B_reportGenerator
 			File.WriteAllLines(outputFile, reportLines);
 		}
 
+		private bool isItemCreatedAfterReportDate(string itemCreatedDate)
+        {
+			//expected format:
+			//yyyy-MM-dd HH:mm:ss
+			//2022-09-30 03:06:14
+			try
+            {
+				DateTime createdDate = DateTime.ParseExact(itemCreatedDate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+				return DateTime.Compare(createdDate, reportLastDate) > 0;
+            } catch (Exception e)
+            {
+				throw new Exception(
+					String.Format(
+						"Cannot convert field sys_created_on.\n" +
+						"Expected format: yyyy-MM-dd HH:mm:ss.\n" +
+						"Actual value: {0}.\nError:{1}\n{2}", itemCreatedDate, e.Message, e.ToString()), e);
+            }
+		}
+
 		private List<ReportLine> generateOnPremData()
         {
 			List<ReportLine> reportLines = new List<ReportLine>();
@@ -40,6 +62,7 @@ namespace B_reportGenerator
             {
 				//skip team VMs
 				if (config.isTeamVm(winServer.Name)) continue;
+				if (isItemCreatedAfterReportDate(winServer.CreateDate)) continue;
 				List<SqlInstance> sqlInstances;
 				if (!data.SqlInstanceData.TryGetValue(winServer.Name, out sqlInstances))
 					continue;
@@ -47,6 +70,7 @@ namespace B_reportGenerator
 				
 				foreach (SqlInstance instance in sqlInstances)
 				{
+					if (isItemCreatedAfterReportDate(instance.CreateDate)) continue;
 					ReportLine opsLine = generateOpsReportLine(winServer, instance);
 					reportLines.Add(opsLine);
 					if (licenseMaterial.MaterialNumber.Equals(config.GetLicenseEnterpriseMaterial().MaterialNumber)) continue;
@@ -113,6 +137,7 @@ namespace B_reportGenerator
 
 			foreach (PublicCloudDb db in data.PublicCloudDbData.Values)
             {
+				if (isItemCreatedAfterReportDate(db.CreateDate)) continue;
 				string name = db.Name;
 
 				string serviceInstance = name;
