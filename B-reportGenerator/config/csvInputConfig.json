@@ -1,0 +1,35 @@
+{
+  "WindowsCsvConfig": {
+    "InstallStatusColumn": "install_status",
+    "InstallStatusValue": "Installed",
+    "ServiceNameColumn": "u_service_name",
+    "ServiceInstanceColumn": "u_service_instance",
+    "CPUCountColumn": "cpu_count",
+    "CPUCoreCountColumn": "cpu_core_count",
+    "NameColumn": "name",
+    "CreatedOnColumn": "sys_created_on",
+    "CreatedOnDateFormat": "yyyy-MM-dd HH:mm:ss"
+  },
+  "SqlInstancesCsvConfig": {
+    "InstallStatusColumn": "install_status",
+    "InstallStatusValue": "Installed",
+    "NameColumn": "name",
+    "ServerNameColumn": "u_servername",
+    "ServiceNameColumn": "u_service_name",
+    "RecoveryServerColumn": "u_recovery_server_name",
+    "EditionColumn": "edition",
+    "VersionColumn": "version",
+    "InstanceNameColumn": "instance_name",
+    "CreatedOnColumn": "sys_created_on",
+    "CreatedOnDateFormat": "yyyy-MM-dd HH:mm:ss"
+  },
+  "PublicCloudDBsCsvConfig": {
+    "InstallStatusColumn": "install_status",
+    "InstallStatusValue": "Installed",
+    "NameColumn": "name",
+    "ServiceInstanceColumn": "u_service_instance",
+    "ServiceNameColumn": "u_service_name",
+    "CreatedOnColumn": "sys_created_on",
+    "CreatedOnDateFormat": "yyyy-MM-dd HH:mm:ss"
+  }
+}

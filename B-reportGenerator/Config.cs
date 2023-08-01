@@ -8,6 +8,7 @@ namespace B_reportGenerator {
 		private static readonly string materialsFile = "config/materials.json";
 		private static readonly string aagFile = "config/aag.json";
 		private static readonly string teamVmsFile = "config/team_vms.json";
+		private static readonly string csvFormatCustomizationsFile = "config/csvInputConfig.json";
 
 		private static readonly Config config = new Config();
 
@@ -33,6 +34,9 @@ namespace B_reportGenerator {
 		public Material GetLicenseEnterpriseMaterial() { return licenseEnterpriseMaterial; }
 		public Material GetLicenseStandardMaterial() { return licenseStandardMaterial; }
 
+		private CsvInputFormatConfig csvInputConfig = new CsvInputFormatConfig();
+
+		public CsvInputFormatConfig GetCsvInputFormatConfig() { return csvInputConfig; }  
 
 		public bool isNodeActive(string name)
         {
@@ -63,6 +67,14 @@ namespace B_reportGenerator {
 			loadMaterials();
 			loadAag();
 			loadTeamVms();
+			loadCsvFormatCustomizations();
+		}
+
+		private void loadCsvFormatCustomizations()
+        {
+			if (!File.Exists(csvFormatCustomizationsFile)) return;
+			string jsonString = File.ReadAllText(csvFormatCustomizationsFile);
+			this.csvInputConfig = JsonSerializer.Deserialize<CsvInputFormatConfig>(jsonString)!;
 		}
 
 		private void loadMaterials()
@@ -122,9 +134,13 @@ namespace B_reportGenerator {
 			}
 			string aagJson = JsonSerializer.Serialize<AAG[]>(data);
 
+			string csvInputConfigJson = JsonSerializer.Serialize<CsvInputFormatConfig>(this.csvInputConfig);
+
 			File.WriteAllText(materialsFile, materialsJson);
 			File.WriteAllText(teamVmsFile, teamVmsJson);
 			File.WriteAllText(aagFile, aagJson);
+			File.WriteAllText(csvFormatCustomizationsFile, csvInputConfigJson);
+
 		}
 
         internal void AddTeamVm(string vm)
@@ -158,4 +174,51 @@ namespace B_reportGenerator {
 		public string Active { get; set; }
 		public string[] Passive { get; set; }
 	}
+
+	public class CsvInputFormatConfig
+	{
+		public WindowsCsvConfig WindowsCsvConfig { get; set; }
+		public SqlInstancesCsvConfig SqlInstancesCsvConfig { get; set; }
+		public PublicCloudDBsCsvConfig PublicCloudDBsCsvConfig { get; set; }
+	}
+
+	public class PublicCloudDBsCsvConfig
+	{
+		public string InstallStatusColumn { get; set; }
+		public string InstallStatusValue { get; set; }
+		public string NameColumn { get; set; }
+		public string ServiceNameColumn { get; set; }
+		public string ServiceInstanceColumn { get; set; }
+		public string CreatedOnColumn { get; set; }
+		public string CreatedOnDateFormat { get; set; }
+	}
+
+	public class SqlInstancesCsvConfig
+	{
+		public string InstallStatusColumn { get; set; }
+		public string InstallStatusValue { get; set; }
+		public string NameColumn { get; set; }
+		public string ServerNameColumn { get; set; }
+		public string ServiceNameColumn { get; set; }
+		public string RecoveryServerColumn { get; set; }
+		public string EditionColumn { get; set; }
+		public string VersionColumn { get; set; }
+		public string InstanceNameColumn { get; set; }
+		public string CreatedOnColumn { get; set; }
+		public string CreatedOnDateFormat { get; set; }
+	}
+
+	public class WindowsCsvConfig
+	{
+		public string InstallStatusColumn { get; set; }
+		public string InstallStatusValue { get; set; }
+		public string ServiceNameColumn { get; set; }
+		public string ServiceInstanceColumn { get; set; }
+		public string CPUCountColumn { get; set; }
+		public string CPUCoreCountColumn { get; set; }
+		public string NameColumn { get; set; }
+		public string CreatedOnColumn { get; set; }
+		public string CreatedOnDateFormat { get; set; }
+	}
+
 }

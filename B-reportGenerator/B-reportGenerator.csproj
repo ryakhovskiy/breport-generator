@@ -13,6 +13,9 @@
     <None Update="config\aag.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="config\csvInputConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="config\materials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

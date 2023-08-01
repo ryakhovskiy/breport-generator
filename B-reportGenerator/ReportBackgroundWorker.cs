@@ -16,10 +16,10 @@ namespace B_reportGenerator
 
         internal ReportBackgroundWorker(BackgroundWorker bw, 
             string windowsCiFile, string sqlCiFile, string publicDbCiFile,
-            string outputFile, string date)
+            string outputFile, string date, CsvInputFormatConfig config)
         {
             this.bw = bw;
-            this.dataLoader = new CsvCiDataLoader(bw, windowsCiFile, sqlCiFile, publicDbCiFile);
+            this.dataLoader = new CsvCiDataLoader(bw, windowsCiFile, sqlCiFile, publicDbCiFile, config);
             this.outputFile = outputFile;
             this.date = date;
         }

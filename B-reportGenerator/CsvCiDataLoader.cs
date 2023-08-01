@@ -24,15 +24,18 @@ namespace B_reportGenerator
         private readonly ConcurrentDictionary<string, PublicCloudDb> publicCloudDbData =
             new ConcurrentDictionary<string, PublicCloudDb>();
 
+        private readonly CsvInputFormatConfig config;
+
         private BackgroundWorker backgroundWorker;
 
         public CsvCiDataLoader(BackgroundWorker bw, 
-            string windowsCiFile, string sqlCiFile, string publicDbCiFile)
+            string windowsCiFile, string sqlCiFile, string publicDbCiFile, CsvInputFormatConfig config)
         {
             this.backgroundWorker = bw;
             this.windowsCiFile = windowsCiFile;
             this.sqlCiFile = sqlCiFile;
             this.publicDbCiFile = publicDbCiFile;
+            this.config = config;
         }
 
         public CmdbCsvData run()
@@ -55,7 +58,6 @@ namespace B_reportGenerator
 
         private void loadWinServerData()
         {
-
             List<string[]> lines = CsvReader.readCsv(windowsCiFile);
             if (lines.Count == 0) return;
 
@@ -63,23 +65,24 @@ namespace B_reportGenerator
             int i = 1;
             try
             {
+                WindowsCsvConfig wConfig = config.WindowsCsvConfig;
                 for (i = 1; i < lines.Count; i++)
                 {
                     string[] line = lines[i];
                     if (null == line) continue;
-                    string status = line[headerData["install_status"]];
-                    if (!status.Equals("Installed")) continue;
+                    string status = line[headerData[wConfig.InstallStatusColumn]];
+                    if (!status.Equals(wConfig.InstallStatusValue)) continue;
 
                     WinServer srv = new WinServer();
-                    srv.Name = line[headerData["name"]];
-                    srv.ServiceName = line[headerData["u_service_name"]];
-                    srv.ServiceInstance = line[headerData["u_service_instance"]];
+                    srv.Name = line[headerData[wConfig.NameColumn]];
+                    srv.ServiceName = line[headerData[wConfig.ServiceNameColumn]];
+                    srv.ServiceInstance = line[headerData[wConfig.ServiceInstanceColumn]];
                     int result;
-                    int.TryParse(line[headerData["cpu_count"]], out result);
+                    int.TryParse(line[headerData[wConfig.CPUCountColumn]], out result);
                     srv.CpuCount = result;
-                    int.TryParse(line[headerData["cpu_core_count"]], out result);
+                    int.TryParse(line[headerData[wConfig.CPUCoreCountColumn]], out result);
                     srv.CpuCoreCount = result;
-                    srv.CreateDate = line[headerData["sys_created_on"]];
+                    srv.CreateDate = line[headerData[wConfig.CreatedOnColumn]];
                     winServerData.TryAdd(srv.Name, srv);
                 }
             }
@@ -99,22 +102,23 @@ namespace B_reportGenerator
             int i = 1;
             try
             {
+                SqlInstancesCsvConfig sConfig = config.SqlInstancesCsvConfig;
                 for (i = 1; i < lines.Count; i++)
                 {
                     string[] line = lines[i];
                     if (null == line) continue;
-                    string status = line[headerData["install_status"]];
-                    if (!status.Equals("Installed")) continue;
+                    string status = line[headerData[sConfig.InstallStatusColumn]];
+                    if (!status.Equals(sConfig.InstallStatusValue)) continue;
 
                     SqlInstance sql = new SqlInstance();
-                    sql.Name = line[headerData["name"]];
-                    sql.ServiceName = line[headerData["u_service_name"]];
-                    sql.RecoveryServerName = line[headerData["u_recovery_server_name"]];
-                    sql.Edition = line[headerData["edition"]];
-                    sql.Version = line[headerData["version"]];
-                    sql.InstanceName = line[headerData["instance_name"]];
-                    sql.ServerName = line[headerData["u_servername"]];
-                    sql.CreateDate = line[headerData["sys_created_on"]];
+                    sql.Name = line[headerData[sConfig.NameColumn]];
+                    sql.ServiceName = line[headerData[sConfig.ServiceNameColumn]];
+                    sql.RecoveryServerName = line[headerData[sConfig.RecoveryServerColumn]];
+                    sql.Edition = line[headerData[sConfig.EditionColumn]];
+                    sql.Version = line[headerData[sConfig.VersionColumn]];
+                    sql.InstanceName = line[headerData[sConfig.InstanceNameColumn]];
+                    sql.ServerName = line[headerData[sConfig.ServerNameColumn]];
+                    sql.CreateDate = line[headerData[sConfig.CreatedOnColumn]];
                     string[] names = sql.Name.Split('@');
                     if (names.Length != 2) continue;
                     sql.ParsedWinServerName = names[1];
@@ -140,18 +144,19 @@ namespace B_reportGenerator
             int i = 1;
             try
             {
+                PublicCloudDBsCsvConfig pConfig = config.PublicCloudDBsCsvConfig;
                 for (i = 1; i < lines.Count; i++)
                 {
                     string[] line = lines[i];
                     if (null == line) continue;
-                    string status = line[headerData["install_status"]];
-                    if (!status.Equals("Installed")) continue;
+                    string status = line[headerData[pConfig.InstallStatusColumn]];
+                    if (!status.Equals(pConfig.InstallStatusValue)) continue;
 
                     PublicCloudDb pdb = new PublicCloudDb();
-                    pdb.Name = line[headerData["name"]];
-                    pdb.ServiceName = line[headerData["u_service_name"]];
-                    pdb.ServiceInstance = line[headerData["u_service_instance"]];
-                    pdb.CreateDate = line[headerData["sys_created_on"]];
+                    pdb.Name = line[headerData[pConfig.NameColumn]];
+                    pdb.ServiceName = line[headerData[pConfig.ServiceNameColumn]];
+                    pdb.ServiceInstance = line[headerData[pConfig.ServiceInstanceColumn]];
+                    pdb.CreateDate = line[headerData[pConfig.CreatedOnColumn]];
                     this.publicCloudDbData.TryAdd(pdb.Name, pdb);
                 }
             } catch (Exception e)

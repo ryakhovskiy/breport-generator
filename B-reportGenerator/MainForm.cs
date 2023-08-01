@@ -14,6 +14,7 @@ namespace B_reportGenerator
 
         private void MainForm_FormClosing(Object sender, FormClosingEventArgs e)
         {
+            readCsvInputConfigData();
             config.saveConfig();
         }
 
@@ -29,6 +30,7 @@ namespace B_reportGenerator
             config.GetTeamVms().ForEach(vm => this.teamVMsListBox.Items.Add(vm));
             config.GetMaterials().ToList().ForEach(m => this.materialsDataGridView.Rows.Add(m.MaterialNumber, m.Description));
             config.GetAag().ToList().ForEach(i => this.aagDataGridView.Rows.Add(i.Key, string.Join(';', i.Value)));
+            loadCsvInputConfigData();
             setCurrentReportDate();
         }
 
@@ -100,6 +102,7 @@ namespace B_reportGenerator
 
         private void generateCsvReportButton_Click(object sender, EventArgs e)
         {
+            readCsvInputConfigData();
             toggleProgressElements(false);
             mainProgressBar.Style = ProgressBarStyle.Marquee;
 
@@ -110,7 +113,7 @@ namespace B_reportGenerator
             string date = reportDateTextBox.Text;
             ReportBackgroundWorker worker = new ReportBackgroundWorker(backgroundWorker, 
                 windowsCiFile, sqlCiFile, publicDbCiFile, 
-                outputFile, date);
+                outputFile, date, config.GetCsvInputFormatConfig());
             backgroundWorker.RunWorkerAsync(worker);
         }
 
@@ -216,6 +219,82 @@ namespace B_reportGenerator
         private void reportMonthTextBox_Leave(object sender, EventArgs e)
         {
             setReportDate();
+        }
+
+        private void loadCsvInputConfigData()
+        {
+            CsvInputFormatConfig csvConfig = config.GetCsvInputFormatConfig();
+            WindowsCsvConfig winConfig = csvConfig.WindowsCsvConfig;
+
+            this.winCsvInstallStatusColumnNameTextBox.Text = winConfig.InstallStatusColumn;
+            this.winCsvInstallStatusValueTextBox.Text = winConfig.InstallStatusValue;
+            this.winCsvServiceNameColumnTextBox.Text = winConfig.ServiceNameColumn;
+            this.winCsvServiceInstanceColumnTextBox.Text = winConfig.ServiceInstanceColumn;
+            this.CreatedOnColumnTextBox.Text = winConfig.CreatedOnColumn;
+            this.winCsvCpuCoreCountColumnTextBox.Text = winConfig.CPUCoreCountColumn;
+            this.winCsvCpuCountColumnTextBox.Text = winConfig.CPUCountColumn;
+            this.createdOnDateFormatTextBox.Text = winConfig.CreatedOnDateFormat;
+            this.winCsvNameColumnTextBox.Text = winConfig.NameColumn;
+
+            SqlInstancesCsvConfig sqlInstanceConfig = csvConfig.SqlInstancesCsvConfig;
+            this.sqlInstanceCsvCreatedOnFormatTextBox.Text = sqlInstanceConfig.CreatedOnDateFormat;
+            this.sqlInstanceCsvCreatedOnColumnTextBox.Text = sqlInstanceConfig.CreatedOnColumn;
+            this.sqlInstanceCsvVersionColumnTextBox.Text = sqlInstanceConfig.VersionColumn;
+            this.sqlInstanceCsvEditionColumnTextBox.Text = sqlInstanceConfig.EditionColumn;
+            this.sqlInstanceCsvRecoveryServerColumnTextBox.Text = sqlInstanceConfig.RecoveryServerColumn;
+            this.sqlInstanceCsvServiceNameColumnTextBox.Text = sqlInstanceConfig.ServiceNameColumn;
+            this.sqlInstanceCsvInstallStatusValueTextBox.Text = sqlInstanceConfig.InstallStatusValue;
+            this.sqlInstanceCsvInstallStatusColumnTextBox.Text = sqlInstanceConfig.InstallStatusColumn;
+            this.sqlInstanceCsvServerNameColumnTextBox.Text = sqlInstanceConfig.ServerNameColumn;
+            this.sqlInstanceCsvNameColumnTextBox.Text = sqlInstanceConfig.NameColumn;
+            this.sqlInstanceCsvInstanceNameColumnTextBox.Text = sqlInstanceConfig.InstanceNameColumn;
+
+            PublicCloudDBsCsvConfig pcdbConfig = csvConfig.PublicCloudDBsCsvConfig;
+            this.pcdbCsvCreatedOnDateFormatTextBox.Text = pcdbConfig.CreatedOnDateFormat;
+            this.pcdbCsvCreatedOnColumnTextBox.Text = pcdbConfig.CreatedOnColumn;
+            this.pcdbCsvNameColumnTextBox.Text = pcdbConfig.NameColumn;
+            this.pcdbCsvServiceInstanceColumnTextBox.Text = pcdbConfig.ServiceInstanceColumn;
+            this.pcdbCsvServiceNameColumnTextBox.Text = pcdbConfig.ServiceNameColumn;
+            this.pcdbCsvInstallStatusValueTextBox.Text = pcdbConfig.InstallStatusValue;
+            this.pcdbCsvInstallStatusColumnTextBox.Text = pcdbConfig.InstallStatusColumn;
+        }
+
+        private void readCsvInputConfigData()
+        {
+            CsvInputFormatConfig csvConfig = config.GetCsvInputFormatConfig();
+            WindowsCsvConfig winConfig = csvConfig.WindowsCsvConfig;
+
+            winConfig.InstallStatusColumn = this.winCsvInstallStatusColumnNameTextBox.Text;
+            winConfig.InstallStatusValue = this.winCsvInstallStatusValueTextBox.Text;
+            winConfig.ServiceNameColumn = this.winCsvServiceNameColumnTextBox.Text;
+            winConfig.ServiceInstanceColumn = this.winCsvServiceInstanceColumnTextBox.Text;
+            winConfig.CreatedOnColumn = this.CreatedOnColumnTextBox.Text;
+            winConfig.CPUCoreCountColumn = this.winCsvCpuCoreCountColumnTextBox.Text;
+            winConfig.CPUCountColumn = this.winCsvCpuCountColumnTextBox.Text;
+            winConfig.CreatedOnDateFormat = this.createdOnDateFormatTextBox.Text;
+            winConfig.NameColumn = this.winCsvNameColumnTextBox.Text;
+
+            SqlInstancesCsvConfig sqlInstanceConfig = csvConfig.SqlInstancesCsvConfig;
+            sqlInstanceConfig.CreatedOnDateFormat = this.sqlInstanceCsvCreatedOnFormatTextBox.Text;
+            sqlInstanceConfig.CreatedOnColumn = this.sqlInstanceCsvCreatedOnColumnTextBox.Text;
+            sqlInstanceConfig.VersionColumn = this.sqlInstanceCsvVersionColumnTextBox.Text;
+            sqlInstanceConfig.EditionColumn = this.sqlInstanceCsvEditionColumnTextBox.Text;
+            sqlInstanceConfig.RecoveryServerColumn = this.sqlInstanceCsvRecoveryServerColumnTextBox.Text;
+            sqlInstanceConfig.ServiceNameColumn = this.sqlInstanceCsvServiceNameColumnTextBox.Text;
+            sqlInstanceConfig.InstallStatusValue = this.sqlInstanceCsvInstallStatusValueTextBox.Text;
+            sqlInstanceConfig.InstallStatusColumn = this.sqlInstanceCsvInstallStatusColumnTextBox.Text;
+            sqlInstanceConfig.NameColumn = this.sqlInstanceCsvNameColumnTextBox.Text;
+            sqlInstanceConfig.ServerNameColumn = this.sqlInstanceCsvServerNameColumnTextBox.Text;
+            sqlInstanceConfig.InstanceNameColumn = this.sqlInstanceCsvInstanceNameColumnTextBox.Text;
+
+            PublicCloudDBsCsvConfig pcdbConfig = csvConfig.PublicCloudDBsCsvConfig;
+            pcdbConfig.CreatedOnDateFormat = this.pcdbCsvCreatedOnDateFormatTextBox.Text;
+            pcdbConfig.CreatedOnColumn = this.pcdbCsvCreatedOnColumnTextBox.Text;
+            pcdbConfig.NameColumn = this.pcdbCsvNameColumnTextBox.Text;
+            pcdbConfig.ServiceInstanceColumn = this.pcdbCsvServiceInstanceColumnTextBox.Text;
+            pcdbConfig.ServiceNameColumn = this.pcdbCsvServiceNameColumnTextBox.Text;
+            pcdbConfig.InstallStatusValue = this.pcdbCsvInstallStatusValueTextBox.Text;
+            pcdbConfig.InstallStatusColumn = this.pcdbCsvInstallStatusColumnTextBox.Text;
         }
     }
 }
