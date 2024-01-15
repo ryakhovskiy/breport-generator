@@ -106,8 +106,8 @@ namespace B_reportGenerator
 
 			string date = reportDate;
 			string primaryTag = winServer.Name;
-			string secondaryTag = String.Format("{0} - {1}", material, materialDescription);
-			string customerTag = instance.InstanceName;
+			string secondaryTag = instance.InstanceName;
+			string customerTag = materialDescription;
 
 			return new ReportLine(serviceInstance, material, consumption, date, primaryTag, secondaryTag, customerTag);
 		}
@@ -123,9 +123,9 @@ namespace B_reportGenerator
 			
 			string date = reportDate;
 			String primaryTag = winServer.Name;
-			string secondaryTag = String.Format("{0} - {1}", material.MaterialNumber, material.Description);
+			string secondaryTag = String.Join(",", sqlInstances);
 
-			string customerTag = String.Join(",", sqlInstances);
+			string customerTag = material.Description;
 
 			return new ReportLine(serviceInstance, material.MaterialNumber, consumption, date, primaryTag, secondaryTag, customerTag);
 		}
@@ -160,8 +160,8 @@ namespace B_reportGenerator
 				}
 
 				string primaryTag = name;
-				string secondaryTag = String.Format("{0} - {1}", material, materialDescription);
-				string customerTag = string.Empty;
+				string secondaryTag = string.Empty;
+				string customerTag = materialDescription;
 
 				ReportLine line = new ReportLine(serviceInstance, material, consumption, date, primaryTag, secondaryTag, customerTag);
 				reportLines.Add(line);
